@@ -47,6 +47,13 @@ class AdminType extends AbstractType
 
             $builder->add('_delete', $options['delete_options']['type'], $options['delete_options']['type_options']);
         }
+        if ($options['edit'] && $admin->hasAccess('edit')) {
+            if (!array_key_exists('translation_domain', $options['edit_options']['type_options'])) {
+                $options['edit_options']['type_options']['translation_domain'] = $admin->getTranslationDomain();
+            }
+
+            $builder->add('_edit', $options['edit_options']['type'], $options['edit_options']['type_options']);
+        }
 
         // hack to make sure the subject is correctly set
         // https://github.com/sonata-project/SonataAdminBundle/pull/2076
@@ -70,14 +77,6 @@ class AdminType extends AbstractType
             } catch (NoSuchIndexException $e) {
                 // no object here
             }
-        }
-        if ($options['edit'] && $admin->hasAccess('edit')) {
-            if (!array_key_exists('translation_domain', $options['edit_options']['type_options'])) {
-                $options['edit_options']['type_options']['translation_domain'] = $admin->getTranslationDomain();
-            }
-
-            $options['edit_options']['type_options']['data'] = $builder->getData();
-            $builder->add('_edit', $options['edit_options']['type'], $options['edit_options']['type_options']);
         }
 
         $admin->setSubject($builder->getData());
