@@ -56,7 +56,7 @@ class ModelLinkType extends AbstractType
         if ($admin->getSubject() !== null) {
             $builder->setData($admin->getSubject());
         }
-        if (null === $builder->getData()) {
+        if (isset($options['property_path']) && null === $builder->getData()) {
             $p = new PropertyAccessor(false, true);
 
             try {
